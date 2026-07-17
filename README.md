@@ -3,7 +3,7 @@
 This repository contains my personal solutions for
 [Advent of Code 2025](https://adventofcode.com/2025).
 
-The project is primarily a learning exercise. I am using the puzzles to practise:
+The project is primarily a learning exercise. I am using the puzzles to practice:
 
 - modern C++;
 - problem decomposition;
