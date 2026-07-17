@@ -26,5 +26,5 @@ dayXX/
 ├── README.md
 ├── main.cpp
 ├── dayXX.cpp
-├── dayXX.hpp
-└── sample_input.txt
+├── dayXX.h
+└── input.txt
