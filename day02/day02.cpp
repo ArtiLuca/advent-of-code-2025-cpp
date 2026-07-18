@@ -7,7 +7,7 @@
 #include <cstddef>
 
 
-=============== PUZZLE INPUT ===============
+// =============== PUZZLE INPUT ===============
 
 void GiftShop::readPuzzleInput() {
 
@@ -29,7 +29,7 @@ void GiftShop::readPuzzleInput() {
     file.close();
 }
 
-=============== PART 1  ===============
+// =============== PART 1  ===============
 
 bool Interval::isValidID(long long current) const {
 
@@ -84,7 +84,7 @@ long long GiftShop::solvePart1(bool comment) const {
 }
 
 
-=============== PART 2 ===============
+// =============== PART 2 ===============
 
 bool Interval::isValidIDPart2(long long current) const {
 
