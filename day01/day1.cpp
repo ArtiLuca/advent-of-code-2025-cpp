@@ -7,7 +7,7 @@
 #include <exception>
 #include <sstream>
 
-=============== PUZZLE INPUT ===============
+// =============== PUZZLE INPUT ===============
 
 void Safe::readPuzzleInput() {
 
@@ -31,7 +31,7 @@ void Safe::readPuzzleInput() {
 }    
 
     
-=============== PART 1 ===============    
+// =============== PART 1 ===============    
 
 int Rotation::rotateDial(int start) const {
 
@@ -74,7 +74,7 @@ int Safe::solvePart1(bool comment) {
 }
 
 
-=============== PART 2 ===============
+// =============== PART 2 ===============
 
 int Rotation::countZeroCrossings(int start) const {
 
