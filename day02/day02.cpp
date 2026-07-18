@@ -7,6 +7,8 @@
 #include <cstddef>
 
 
+=============== PUZZLE INPUT ===============
+
 void GiftShop::readPuzzleInput() {
 
     std::ifstream file(puzzleInput);
@@ -27,6 +29,7 @@ void GiftShop::readPuzzleInput() {
     file.close();
 }
 
+=============== PART 1  ===============
 
 bool Interval::isValidID(long long current) const {
 
@@ -64,6 +67,24 @@ long long Interval::sumInvalidIDs() const {
     
     return sum;
 }
+
+long long GiftShop::checkInterval(size_t i) const {    
+    return ranges[i].sumInvalidIDs();
+}
+
+
+long long GiftShop::solvePart1(bool comment) const {
+    
+    long long sum = 0;
+    for (size_t i = 0; i < ranges.size(); ++i) {
+        sum += checkInterval(i);
+    }
+    if (comment) std::cout << "Total Sum (Part 1 Solution) = " << sum << std::endl;
+    return sum;
+}
+
+
+=============== PART 2 ===============
 
 bool Interval::isValidIDPart2(long long current) const {
 
@@ -107,23 +128,6 @@ long long Interval::sumInvalidIDsPart2() const {
     }
     return sum;
 }
-
-long long GiftShop::checkInterval(size_t i) const {    
-    return ranges[i].sumInvalidIDs();
-}
-
-
-long long GiftShop::solvePart1(bool comment) const {
-    
-    long long sum = 0;
-    for (size_t i = 0; i < ranges.size(); ++i) {
-        sum += checkInterval(i);
-    }
-    if (comment) std::cout << "Total Sum (Part 1 Solution) = " << sum << std::endl;
-    return sum;
-}
-
-
 
 long long GiftShop::checkIntervalPart2(size_t i) const {    
     return ranges[i].sumInvalidIDsPart2();
