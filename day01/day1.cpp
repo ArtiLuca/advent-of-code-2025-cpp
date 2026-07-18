@@ -7,9 +7,35 @@
 #include <exception>
 #include <sstream>
 
+=============== PUZZLE INPUT ===============
+
+void Safe::readPuzzleInput() {
+
+    std::ifstream file(puzzleInput);
+    if (!file.is_open()) {
+        throw std::runtime_error("Error opening file!");
+    }
+
+    else {
+        
+        // Read all rotations from file
+        std::string line;
+        while (std::getline(file, line)) {
+            Rotation rot;
+            rot.dir = line.at(0);
+            rot.val = std::stoi(line.substr(1));
+            rotations.push_back(rot);
+        }
+        numRotations = (int) rotations.size();
+    }
+}    
+
+    
+=============== PART 1 ===============    
+
 int Rotation::rotateDial(int start) const {
 
-    // Validaty check
+    // Validity check
     if (dir != 'R' && dir != 'L') {
         throw std::runtime_error("Not a valid rotation!");
     }
@@ -25,6 +51,30 @@ int Rotation::rotateDial(int start) const {
     // Return finalized remainder within 0-99 interval
     return next % 100;
 }
+
+int Safe::solvePart1(bool comment) {
+
+    // start at current dial (50)
+    int currentDialValue = currentDial;
+    int zeroCount = 0;
+
+    // perform each rotation
+    for (const auto& rot : rotations) {
+
+        // rotate dial and get next value
+        int nextDialValue = rot.rotateDial(currentDialValue);
+        // update if we land on 0
+        if (nextDialValue == 0)  zeroCount++;
+        // update current dial
+        currentDialValue = nextDialValue;
+    }
+
+    if (comment) std::cout << "Password is: " << zeroCount << "\n";
+    return zeroCount;
+}
+
+
+=============== PART 2 ===============
 
 int Rotation::countZeroCrossings(int start) const {
 
@@ -48,54 +98,12 @@ int Rotation::countZeroCrossings(int start) const {
         // if we don't reach zero, we return
         if (val < distanceFromZero) return 0;
 
-        // otherwise, we count 1 for hitting first zero,
-        // and divide the remaining distance by 100 to count any extra corssings
+        // otherwise, we count 1 for hitting the first zero,
+        // and divide the remaining distance by 100 to count any extra crossings
         int nextDistance = val - distanceFromZero;
         return 1 + (nextDistance / 100); 
     }
 
-}
-
-void Safe::readPuzzleInput() {
-
-    std::ifstream file(puzzleInput);
-    if (!file.is_open()) {
-        throw std::runtime_error("Error opening file!");
-    }
-
-    else {
-        
-        // Read all rotations from file
-        std::string line;
-        while (std::getline(file, line)) {
-            Rotation rot;
-            rot.dir = line.at(0);
-            rot.val = std::stoi(line.substr(1));
-            rotations.push_back(rot);
-        }
-        numRotations = (int) rotations.size();
-    }
-}
-
-int Safe::solvePart1(bool comment) {
-
-    // start at current dial (50)
-    int currentDialValue = currentDial;
-    int zeroCount = 0;
-
-    // perform each rotation
-    for (const auto& rot : rotations) {
-
-        // rotate dial and get next value
-        int nextDialValue = rot.rotateDial(currentDialValue);
-        // update if we land on 0
-        if (nextDialValue == 0)  zeroCount++;
-        // update current dial
-        currentDialValue = nextDialValue;
-    }
-
-    if (comment) std::cout << "Password is: " << zeroCount << "\n";
-    return zeroCount;
 }
 
 int Safe::solvePart2(bool comment) {
