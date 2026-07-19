@@ -27,4 +27,4 @@ dayXX/
 ├── main.cpp
 ├── dayXX.cpp
 ├── dayXX.h
-└── input.txt (non included)
+└── input.txt (not included)
