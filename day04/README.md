@@ -114,41 +114,44 @@ So the stored grid uses `Θ(N × M)` space.
 In Part 2, we want to maximize the number of paper rolls that can be removed.
 
 A roll can be removed if it has fewer than 4 neighboring paper rolls. After a
-roll is removed, other nearby rolls may become removable too. Therefore, the
-process can cascade.
+roll is removed, the neighboring rolls may lose one adjacent roll, which can make
+some of them newly removable. Therefore, the process can cascade.
 
-To handle this, I used a queue-based approach.
+This reminded me of Breadth-First Search on a grid. In BFS, we usually start
+from one source vertex, put it in a FIFO queue, and then visit its neighbors
+level by level. Here, instead of starting from one source, we start from all
+paper rolls that are initially removable.
 
-The idea is:
+So the idea is similar to a multi-source BFS on a 2D grid:
 
-1. Find all paper rolls that are initially removable.
-2. Add their coordinates to a queue.
-3. Repeatedly remove rolls from the queue.
-4. Whenever a roll is removed, re-check its neighboring rolls.
-5. If a neighboring roll has now become removable, add it to the queue.
-6. Continue until no more rolls can be removed.
+- each cell is like a vertex;
+- the 8 adjacent cells are like its neighbors;
+- all initially removable rolls are inserted into the queue at the start;
+- removing a roll can make neighboring rolls newly removable;
+- those newly removable rolls are then added to the queue.
 
-I mark removed rolls with `x` in a copy of the grid, so that the original grid is
-not modified.
+Technically, this is not BFS for shortest paths. It is better described as a
+queue-based cascade or worklist algorithm inspired by multi-source BFS.
 
 ## Idea
 
-The queue stores coordinates of cells that can potentially be removed.
+I use a FIFO queue `Q` to store the coordinates of rolls that can potentially be
+removed.
 
-At the beginning, the queue is filled with all cells that satisfy the Part 1
-condition.
+First, I scan the whole grid and enqueue every `@` cell with fewer than 4
+neighboring `@` cells.
 
 Then, while the queue is not empty:
 
-1. Pop a coordinate from the front.
-2. If that cell has already been removed, skip it.
-3. Otherwise, mark it as removed and increase the answer.
-4. Check its 8 neighboring cells.
-5. For every neighboring `@`, count its current number of neighboring `@` cells.
-6. If that count is now less than 4, push that neighbor into the queue.
+1. I pop one coordinate from the queue.
+2. If that cell has already been removed, I skip it.
+3. Otherwise, I mark it as removed with `x` and increment the answer.
+4. I check its 8 neighbors.
+5. Any neighboring `@` cell that now has fewer than 4 neighboring `@` cells is
+   pushed into the queue.
 
-This works because only neighbors of a removed roll can have their surrounding
-count changed.
+This works because only the neighbors of a removed roll can have their adjacent
+roll count changed.
 
 ## Pseudocode
 
