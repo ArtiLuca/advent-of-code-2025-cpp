@@ -203,9 +203,9 @@ During the queue phase, every removed cell causes at most 8 neighboring cells to
 be rechecked. Each recheck counts at most 8 neighbors, so this is still a
 constant amount of work per queue operation.
 
-A cell may be pushed more than once before it is removed, but only a constant
-number of neighboring removals can cause this. Therefore, the total work remains
-linear in the number of grid cells.
+A cell may be pushed more than once before it is removed, but this can only happen 
+because of one of its 8 neighboring cells being removed. 
+Therefore, each cell can only cause a constant amount of duplicate queue work.
 
 - Time complexity: `Θ(N × M)`
 - Extra space complexity: `Θ(N × M)`
