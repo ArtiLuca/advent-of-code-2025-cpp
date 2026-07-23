@@ -4,8 +4,6 @@
 #include <vector>
 
 // math operators
-// const char ADDITION = '+';
-// const char MULTIPLICATION = '*'; 
 inline constexpr char ADDITION = '+';
 inline constexpr char MULTIPLICATION = '*';
 
