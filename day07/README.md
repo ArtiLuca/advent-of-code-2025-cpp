@@ -169,13 +169,8 @@ Instead, I use dynamic programming.
 The key idea is to count how many timelines reach each cell, rather than storing
 each timeline separately.
 
-Let:
-
-```text
-t(i, j)
-```
-
-be the number of timelines reaching row `i`, column `j`, and moving downward.
+Let `t(i, j)` be the number of timelines reaching row `i`, column `j`, and
+moving downward.
 
 The start cell contributes one timeline.
 
@@ -195,39 +190,40 @@ depends on row `i - 1`.
 
 ## Recurrence
 
-For the start cell:
+The base case is the entry point:
 
 ```text
 t(startRow, startCol) = 1
 ```
 
-For each later cell `(i, j)`:
+For every later cell `(i, j)`, the recurrence is:
 
 ```text
-t(i, j) = 0                         if G[i][j] == '^'
+if G[i][j] == '^':
+    t(i, j) = 0
 
-t(i, j) = up + fromLeft + fromRight  if G[i][j] == '.'
+if G[i][j] == '.':
+    t(i, j) = up + fromLeft + fromRight
 ```
 
 where:
 
 ```text
 up =
-    t(i - 1, j)    if G[i - 1][j] != '^'
-    0              otherwise
-```
+    t(i - 1, j) if G[i - 1][j] != '^'
+    0 otherwise
 
-```text
 fromLeft =
-    t(i - 1, j - 1)    if j > 0 and G[i][j - 1] == '^'
-    0                  otherwise
+    t(i - 1, j - 1) if j > 0 and G[i][j - 1] == '^'
+    0 otherwise
+
+fromRight =
+    t(i - 1, j + 1) if j < C - 1 and G[i][j + 1] == '^'
+    0 otherwise
 ```
 
-```text
-fromRight =
-    t(i - 1, j + 1)    if j < C - 1 and G[i][j + 1] == '^'
-    0                  otherwise
-```
+This means that each cell collects all timelines that can arrive there from the
+previous row or from a neighboring splitter on the current row.
 
 ## Pseudocode
 
