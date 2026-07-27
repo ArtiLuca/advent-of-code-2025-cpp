@@ -2,7 +2,6 @@
 
 > These are my original notes for this day, kept to show my first reasoning before cleaning the explanation into the final `README.md`.
 
-
 ## Part 1
 
 In Part 1, we are dealing with batteries and their joltage ratings, which can be any value in `[1..9]`.
@@ -23,8 +22,8 @@ Given a string `X` corresponding to the battery bank being checked, with `n = X.
 
 Then, I split the algorithm into two cases:
 
-* **Case 1:** If `idx1` is not the last index, then the largest combination must start with this maximum digit `max1`. I scan the remaining digits to its right, from `idx1 + 1` to `n - 1`, to find the largest available second digit `max2` to pair with it.
-* **Case 2:** If `idx1` is the very last index, it cannot be used as the first digit. I scan the digits to its left, from `0` to `idx1 - 1`, to find the largest possible first digit `max2`.
+- **Case 1:** If `idx1` is not the last index, then the largest combination must start with this maximum digit `max1`. I scan the remaining digits to its right, from `idx1 + 1` to `n - 1`, to find the largest available second digit `max2` to pair with it.
+- **Case 2:** If `idx1` is the very last index, it cannot be used as the first digit. I scan the digits to its left, from `0` to `idx1 - 1`, to find the largest possible first digit `max2`.
 
 ## Pseudocode
 
@@ -82,11 +81,15 @@ The time complexity for a single bank is `Θ(B)`, as we scan the string at most 
 
 Therefore, if all banks have length `B`, the overall time complexity is:
 
-`T(B, L) = Θ(B × L)`
+```text
+T(B, L) = Θ(B × L)
+```
 
 More generally, if the banks have different lengths, the total time is proportional to the sum of their lengths.
 
 The auxiliary space complexity is `Θ(1)`.
+
+---
 
 ## Part 2
 
@@ -96,7 +99,7 @@ The approach used for Part 1 would not work well, so I decided to use a greedy a
 
 The problem can be defined in more general terms as follows:
 
-Given a bank of batteries `B[0..n-1]` and a fixed value `k ≤ n`—in this case, `k = 12`—we must find a subsequence of length exactly `k` that maximizes the joltage rating from left to right while preserving the original order.
+Given a bank of batteries `B[0..n-1]` and a fixed value `k <= n` — in this case, `k = 12` — we must find a subsequence of length exactly `k` that maximizes the joltage rating from left to right while preserving the original order.
 
 ## Idea
 
@@ -112,7 +115,7 @@ We can implement this greedy logic by simulating a stack structure `S` and using
 
 ## Pseudocode
 
-In our case, `n = X.length` and `k = 12`, but the algorithm can be defined for any given `k ≤ n`:
+In our case, `n = X.length` and `k = 12`, but the algorithm can be defined for any given `k <= n`:
 
 ```text
 findJoltagePart2(X, n, k)
@@ -170,144 +173,126 @@ If we sum the insertions and removals performed on the stack `S`, the upper boun
 
 Therefore, if all `M` battery banks have length `N`, the overall time complexity is:
 
-`T(N, M) = Θ(M × N)`
+```text
+T(N, M) = Θ(M × N)
+```
 
 More generally, if the banks have different lengths, the total time is proportional to the sum of their lengths.
 
 The auxiliary space complexity is `Θ(N)` for the stack structure used for the largest battery bank being evaluated, as we can reuse the same memory space across multiple banks without storing all `M` results simultaneously.
 
-# Formal Definitions
+---
+
+## Formal Definitions
 
 This section is solely to train myself in writing formal definitions.
 
-## Part 1
+To avoid GitHub rendering issues in these original notes, I write the formal version mostly in plain notation.
+
+### Part 1
 
 Formally, the problem for Part 1 can be defined as follows.
 
-Given a string $X$ of length $n \ge 2$, we operate piecewise based on the position of the global maximum using the two-scan approach.
+Given a string `X` of length `n >= 2`, we operate piecewise based on the position of the global maximum using the two-scan approach.
 
-For clarity, let $X[i]$ denote the numerical value of the digit at index $i$.
+For clarity, let `X[i]` denote the numerical value of the digit at index `i`.
 
-First, we find the index $i^*$ of the first occurrence of the maximum digit in $X$:
+First, we find the index `i_star` of the first occurrence of the maximum digit in `X`:
 
-$$
-i^* =
-\min
-\left{
-i \in {0,\ldots,n-1}
-;\middle|;
-X[i] = \max_{0 \le m < n} X[m]
-\right}.
-$$
+```text
+i_star =
+    min { i in {0, ..., n - 1} such that
+          X[i] = max { X[m] : 0 <= m < n } }
+```
 
-Depending on the position of $i^*$, there are two mutually exclusive cases for finding a secondary index $j^*$.
+Depending on the position of `i_star`, there are two mutually exclusive cases for finding a secondary index `j_star`.
 
-### Case 1: $i^* < n-1$
+### Case 1: `i_star < n - 1`
 
 The maximum is not the last element, so it can serve as the most significant digit. We scan the remaining suffix and choose the first occurrence of its largest available digit:
 
-$$
-j^* =
-\min
-\left{
-j \in {i^*+1,\ldots,n-1}
-;\middle|;
-X[j] = \max_{i^* < m < n} X[m]
-\right}.
-$$
+```text
+j_star =
+    min { j in {i_star + 1, ..., n - 1} such that
+          X[j] = max { X[m] : i_star < m < n } }
+```
 
 The resulting joltage is:
 
-$$
-10X[i^*] + X[j^*].
-$$
+```text
+10 * X[i_star] + X[j_star]
+```
 
-### Case 2: $i^* = n-1$
+### Case 2: `i_star = n - 1`
 
 The maximum digit is the last element and is therefore constrained to be the least significant digit. We scan the preceding prefix and choose the first occurrence of its largest available digit:
 
-$$
-j^* =
-\min
-\left{
-j \in {0,\ldots,i^*-1}
-;\middle|;
-X[j] = \max_{0 \le m < i^*} X[m]
-\right}.
-$$
+```text
+j_star =
+    min { j in {0, ..., i_star - 1} such that
+          X[j] = max { X[m] : 0 <= m < i_star } }
+```
 
 The resulting joltage is:
 
-$$
-10X[j^*] + X[i^*].
-$$
+```text
+10 * X[j_star] + X[i_star]
+```
 
 The complete result can therefore be written as:
 
-$$
-J_2(X) =
-\begin{cases}
-10X[i^*] + X[j^*], & \text{if } i^* < n-1, [4pt]
-10X[j^*] + X[i^*], & \text{if } i^* = n-1.
-\end{cases}
-$$
+```text
+if i_star < n - 1:
+    J_2(X) = 10 * X[i_star] + X[j_star]
 
-## Part 2
+if i_star = n - 1:
+    J_2(X) = 10 * X[j_star] + X[i_star]
+```
+
+### Part 2
 
 Formally, the problem for Part 2 can be defined as follows.
 
-Given a string $X$ of length $n$, composed of digits from the alphabet
+Given a string `X` of length `n`, composed of digits from the alphabet:
 
-$$
-\Sigma = {1,2,\ldots,9},
-$$
+```text
+Sigma = {1, 2, ..., 9}
+```
 
-and an integer $k \in \mathbb{Z}$ such that
+and an integer `k` such that:
 
-$$
-1 \le k \le n,
-$$
+```text
+1 <= k <= n
+```
 
-we must find a subsequence $X'$ of length exactly $k$.
+we must find a subsequence `X_prime` of length exactly `k`.
 
 A valid subsequence is defined by a sequence of indices satisfying:
 
-$$
-0 \le i_1 < i_2 < \cdots < i_k < n.
-$$
+```text
+0 <= i_1 < i_2 < ... < i_k < n
+```
 
 The numerical value associated with the chosen subsequence is:
 
-$$
-V(i_1,\ldots,i_k)
-=================
+```text
+V(i_1, ..., i_k)
+    = sum from j = 1 to k of X[i_j] * 10^(k - j)
+```
 
-\sum_{j=1}^{k}
-X[i_j] \cdot 10^{k-j}.
-$$
+The goal is to find indices `i_1_star, ..., i_k_star` that maximize this value:
 
-The goal is to find indices $i_1^*,\ldots,i_k^*$ such that:
-
-$$
-(i_1^*,\ldots,i_k^*)
-\in
-\operatorname*{arg,max}_{
-0 \le i_1 < i_2 < \cdots < i_k < n
-}
-V(i_1,\ldots,i_k).
-$$
+```text
+(i_1_star, ..., i_k_star)
+    belongs to argmax over all valid index sequences of V(i_1, ..., i_k)
+```
 
 Equivalently:
 
-$$
-V(i_1^*,\ldots,i_k^*)
-=====================
+```text
+V(i_1_star, ..., i_k_star)
+    = max over all valid index sequences of
+      sum from j = 1 to k of X[i_j] * 10^(k - j)
+```
 
-\max_{
-0 \le i_1 < i_2 < \cdots < i_k < n
-}
-\sum_{j=1}^{k}
-X[i_j] \cdot 10^{k-j}.
-$$
-
-Because all candidate subsequences have the same fixed length $k$, maximizing their numerical value is equivalent to finding the lexicographically largest subsequence of length $k$.
+Because all candidate subsequences have the same fixed length `k`, maximizing their numerical value is equivalent to finding the lexicographically largest subsequence of length `k`.
