@@ -187,76 +187,89 @@ The auxiliary space complexity is `Θ(N)` for the stack structure used for the l
 
 This section is solely to train myself in writing formal definitions.
 
-To avoid GitHub rendering issues in these original notes, I write the formal version mostly in plain notation.
+To avoid GitHub rendering issues in these original notes, I write the formal
+version mostly in plain notation.
 
 ### Part 1
 
 Formally, the problem for Part 1 can be defined as follows.
 
-Given a string `X` of length `n >= 2`, we operate piecewise based on the position of the global maximum using the two-scan approach.
+Given a string `X` of length `n >= 2`, we operate piecewise based on the position
+of the global maximum using the two-scan approach.
 
 For clarity, let `X[i]` denote the numerical value of the digit at index `i`.
 
-First, we find the index `i_star` of the first occurrence of the maximum digit in `X`:
+First, we find `firstIndex`, the first occurrence of the maximum digit in `X`:
 
 ```text
-i_star =
-    min { i in {0, ..., n - 1} such that
-          X[i] = max { X[m] : 0 <= m < n } }
+firstIndex =
+    the smallest index i in {0, ..., n - 1}
+    such that X[i] is maximum among all digits X[0], ..., X[n - 1]
 ```
 
-Depending on the position of `i_star`, there are two mutually exclusive cases for finding a secondary index `j_star`.
+Depending on the position of `firstIndex`, there are two mutually exclusive
+cases for finding `secondIndex`.
 
-### Case 1: `i_star < n - 1`
+### Case 1: `firstIndex < n - 1`
 
-The maximum is not the last element, so it can serve as the most significant digit. We scan the remaining suffix and choose the first occurrence of its largest available digit:
+The maximum is not the last element, so it can serve as the most significant
+digit.
 
-```text
-j_star =
-    min { j in {i_star + 1, ..., n - 1} such that
-          X[j] = max { X[m] : i_star < m < n } }
-```
-
-The resulting joltage is:
+We scan the suffix to its right and choose the first occurrence of the largest
+available digit:
 
 ```text
-10 * X[i_star] + X[j_star]
-```
-
-### Case 2: `i_star = n - 1`
-
-The maximum digit is the last element and is therefore constrained to be the least significant digit. We scan the preceding prefix and choose the first occurrence of its largest available digit:
-
-```text
-j_star =
-    min { j in {0, ..., i_star - 1} such that
-          X[j] = max { X[m] : 0 <= m < i_star } }
+secondIndex =
+    the smallest index j in {firstIndex + 1, ..., n - 1}
+    such that X[j] is maximum among all digits
+    X[firstIndex + 1], ..., X[n - 1]
 ```
 
 The resulting joltage is:
 
 ```text
-10 * X[j_star] + X[i_star]
+10 * X[firstIndex] + X[secondIndex]
+```
+
+### Case 2: `firstIndex = n - 1`
+
+The maximum digit is the last element and is therefore constrained to be the
+least significant digit.
+
+We scan the prefix to its left and choose the first occurrence of the largest
+available digit:
+
+```text
+secondIndex =
+    the smallest index j in {0, ..., firstIndex - 1}
+    such that X[j] is maximum among all digits
+    X[0], ..., X[firstIndex - 1]
+```
+
+The resulting joltage is:
+
+```text
+10 * X[secondIndex] + X[firstIndex]
 ```
 
 The complete result can therefore be written as:
 
 ```text
-if i_star < n - 1:
-    J_2(X) = 10 * X[i_star] + X[j_star]
+if firstIndex < n - 1:
+    J2(X) = 10 * X[firstIndex] + X[secondIndex]
 
-if i_star = n - 1:
-    J_2(X) = 10 * X[j_star] + X[i_star]
+if firstIndex = n - 1:
+    J2(X) = 10 * X[secondIndex] + X[firstIndex]
 ```
 
 ### Part 2
 
 Formally, the problem for Part 2 can be defined as follows.
 
-Given a string `X` of length `n`, composed of digits from the alphabet:
+Given a string `X` of length `n`, composed only of digits from:
 
 ```text
-Sigma = {1, 2, ..., 9}
+{1, 2, ..., 9}
 ```
 
 and an integer `k` such that:
@@ -265,34 +278,42 @@ and an integer `k` such that:
 1 <= k <= n
 ```
 
-we must find a subsequence `X_prime` of length exactly `k`.
+we must find a subsequence of length exactly `k`.
 
-A valid subsequence is defined by a sequence of indices satisfying:
+A valid subsequence is defined by a sequence of chosen indices:
 
 ```text
-0 <= i_1 < i_2 < ... < i_k < n
+chosen[1], chosen[2], ..., chosen[k]
+```
+
+satisfying:
+
+```text
+0 <= chosen[1] < chosen[2] < ... < chosen[k] < n
 ```
 
 The numerical value associated with the chosen subsequence is:
 
 ```text
-V(i_1, ..., i_k)
-    = sum from j = 1 to k of X[i_j] * 10^(k - j)
+value(chosen)
+    =
+    X[chosen[1]] * 10^(k - 1)
+  + X[chosen[2]] * 10^(k - 2)
+  + ...
+  + X[chosen[k]] * 10^0
 ```
 
-The goal is to find indices `i_1_star, ..., i_k_star` that maximize this value:
+The goal is to find a valid sequence of indices `bestChosen` such that:
 
 ```text
-(i_1_star, ..., i_k_star)
-    belongs to argmax over all valid index sequences of V(i_1, ..., i_k)
+value(bestChosen) >= value(chosen)
 ```
 
-Equivalently:
+for every other valid sequence of indices `chosen`.
 
-```text
-V(i_1_star, ..., i_k_star)
-    = max over all valid index sequences of
-      sum from j = 1 to k of X[i_j] * 10^(k - j)
-```
+Equivalently, `bestChosen` is a valid subsequence of length `k` whose numerical
+value is maximum among all valid subsequences of length `k`.
 
-Because all candidate subsequences have the same fixed length `k`, maximizing their numerical value is equivalent to finding the lexicographically largest subsequence of length `k`.
+Because all candidate subsequences have the same fixed length `k`, maximizing
+their numerical value is equivalent to finding the lexicographically largest
+subsequence of length `k`.
