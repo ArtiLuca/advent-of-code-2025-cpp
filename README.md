@@ -23,13 +23,16 @@ Each completed day has its own directory:
 
 ```text
 dayXX/
-├── README.md
+├── README.md          final cleaned explanation
+├── original_notes.md  original write-up / first reasoning notes
 ├── main.cpp
 ├── dayXX.cpp
 ├── dayXX.h
-└── input.txt (not included)
+└── input.txt          not included
 ```
 
-## Note
-After Day 9, the problems became too complex for me, so I will 'pause' Advent of Code 2025 and
-come back to them in the future.
+## Status
+
+I completed Days 1–9 of Advent of Code 2025 as a focused C++ and algorithms practice project.
+
+After Day 9, the puzzles became significantly more complex, so I decided to pause this year here and continue practicing with another Advent of Code year. I may come back to the remaining 2025 puzzles in the future.
