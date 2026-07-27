@@ -28,3 +28,7 @@ dayXX/
 ├── dayXX.cpp
 ├── dayXX.h
 └── input.txt (not included)
+
+## Note
+After Day 9, the problems became too complex for me, so I will 'pause' Advent of Code 2025 and
+come back to them in the future.
