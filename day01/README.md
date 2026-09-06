@@ -115,6 +115,15 @@ modulo logic as in Part 1.
 
 This avoids simulating every individual movement of the dial.
 
+The idea is that, during a rotation, the dial repeats its positions every `100` movements.
+
+Therefore, every complete group of `100` clicks contributes exactly one passage
+through `0`. The remaining partial movement contributes another crossing only
+when it reaches the next occurrence of `0`.
+
+The arithmetic formulas calculate exactly how many such boundaries are crossed,
+without examining every intermediate dial position.
+
 ## Pseudocode
 
 ```text
@@ -140,17 +149,6 @@ solvePart2(rotations)
 
     return count
 ```
-
-## Why the direct calculation works
-
-During a rotation, the dial repeats its positions every `100` movements.
-
-Therefore, every complete group of `100` clicks contributes exactly one passage
-through `0`. The remaining partial movement contributes another crossing only
-when it reaches the next occurrence of `0`.
-
-The arithmetic formulas calculate exactly how many such boundaries are crossed,
-without examining every intermediate dial position.
 
 ## Complexity
 
