@@ -28,8 +28,7 @@ For a left rotation, the subtraction may produce a negative value. I therefore
 normalize the result back into the interval `[0, 99]`:
 
 ```text
-newPosition =
-    ((currentPosition - distance) mod 100 + 100) mod 100
+newPosition = ((currentPosition - distance) mod 100 + 100) mod 100
 ```
 
 After every rotation, I check whether the resulting position is `0`.
